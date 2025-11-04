@@ -1,16 +1,12 @@
-# mocnels_momentum
+TUGAS 7
+1. Widget tree merupakan representasi hierarki dari semua widget yang kita gunakan untuk membuat UI pada aplikasi kita. Pada Widget Tree akan terdiri dari Root Widget yang biasanya adalah MaterialApp. Setelah itu, ada child atau children yang bisa memiliki anak lagi. Widget pada level terluar terdiri dari Scaffold, Column, dan Row. Widget pada level terdalam terdiri dari Text, Icon, Image. Hubungan parent-chid, Widget Parent merupakan widget yang mengandung widget lain, contohnya column adalah parent dari widget yang ada didalamnya. Sedangkan, Widget Child merupakan widget yang ada di dalam parent. Parent akan bertanggung jawab untuk mengatur posisi dan ukuran dari childnya. Dalam Tugas ini juga bisa dilihat kalau parent menyusun agar semua childrennya berjejer secara horizontal maupun vertikal.
 
-A new Flutter project.
+2. MyApp (StatelessWidget) yang merupakan root widget aplikasi saya yang berfungsi untuk menginisialisasi aplikasi dan mengembalikan MaterialApp. MyHomePage (StatelessWidget) ynag merupakan widget untuk halaman utama di menu.dart yang berfungsi untuk membangun Scaffold yang berisi AppBar dan body. ItemCard (StatelessWidget) yang berfungsi untuk menampilkan satu item dalam GridView. Fungsinya adalah menampilkan icon dan text dalam sebuah Material yang bisa diklik untuk memunculkan SnackBar. MaterialApp yang berfungsi untuk mengatur tema global, judul, dan menentukan halaman awal. Scaffold berfungsi untuk menyediakan struktur halaman dasar. AppBar berfungsi untuk menampilkan text pada bagian atas layar. Padding yang digunakan untuk membungkus Column utama di body serta membungkus text. Column berfungsi untuk menyusun widget-widget childrennya secara vertikal. SizedBox digunakan untuk membuat kotak kosong sebagai pemberi jarak. Center untuk memposisikan column di tengah. GridView.count berfungsi untuk menyusun ItemCard dalam grid yang dapat discroll. Material berfungsi sebagai kanvas dasar untuk ItemCard yang saya beri backgroundColor dan borderRadius. InkWell berfungsi untuk membungkus Container agar dapat diklik. SnackBar adalah widget yang muncul sementara di bagian bawah sebagai pesan popup ketika ItemCard diklik. Icon untuk menampilkan ikon.
 
-## Getting Started
+3. MaterialApp merupakan sebuah widget yang menyediakan berbagai fungsi seperti navigasi, theme, Lokal, dan menentukan halaman awal. Widget ini sering digunakan sebagai root karena menyediakan semua layanan penting ke seluruh widget yang ada dibawahnya dalam widget tree. Tanpa MaterialApp sebagai parent, maka widget laiin seperti Navigator atau Theme tidak akan berfungsi dengan baik.
 
-This project is a starting point for a Flutter application.
+4. StatelessWidget merupakan widget yang tidak memiliki state internal yang bisa berubah. StatelessWidget digunakan ketika tampilan widget tidak akan pernah berubah, kecuali parentnya memerintahkannya utnuk berubah. Hal ini tentu berpengaruh ke peforma yang lebih baik. Sedangkan StatefulWidget merupakan widget yang memiliki state internal yang dapat berubah selama siklus widget tersebut. StatefulWidget digunakan ketika UI widget perlu berubah secara dinamis sebagai respon terhadap interaksi dengan user, data yang masuk maupun animasi.
 
-A few resources to get you started if this is your first Flutter project:
+5. BuildContext seperti alamat sebuah widget di dalam widget tree. Setiap widget akan memiliki BuildContextnya sendiri-sendiri yang menunjukkan dimana posisinya terhadap widget lain. Ini sangat penting karena BuildContext merupakan acuan yang digunakan widget untuk berinteraksi dengan tree diatasnya. Fungsi utamanya adalah untuk mencari widget tertentu yang berada di level parent atau yang lebih tinggi. Untuk penggunannya biasa adalah dengan menggunakan method .of() seperti Theme.of(context) yang berarti tolong cara ThemeData terdekat yang ada di atas dan masih banyak lagi.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+6. Hot Reload akan memuat ulang perubahan kode kita secara instan tanpa kehilangan state aplikasi. Sedangkan hot restart akan memuat ulang aplikasi dengan melakukan reset semua state kembali ke awal.
