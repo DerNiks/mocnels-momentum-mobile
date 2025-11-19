@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mocnels_momentum/left_drawer.dart';
-import 'package:mocnels_momentum/product_form.dart';
+import 'package:mocnels_momentum/widgets/left_drawer.dart';
+import 'package:mocnels_momentum/screens/product_form.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
