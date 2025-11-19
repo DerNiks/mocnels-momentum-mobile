@@ -26,7 +26,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(10)),
                 Text(
-                  "Stay updated with the latest football products",
+                  "Stay updated",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,

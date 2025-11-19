@@ -14,8 +14,8 @@ class ProductEntryPage extends StatefulWidget {
 
 class _ProductEntryPageState extends State<ProductEntryPage> {
   Future<List<Product>> fetchProduct(CookieRequest request) async {
-    // Request ke endpoint JSON Django
-    final response = await request.get('http://localhost:8000/json/');
+    final response = await request.get('http://10.0.2.2:8000/json/');
+
     var data = response;
 
     List<Product> listProduct = [];
@@ -31,7 +31,7 @@ class _ProductEntryPageState extends State<ProductEntryPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Daftar Produk')),
+      appBar: AppBar(title: const Text('Product List')),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchProduct(request),
@@ -40,50 +40,67 @@ class _ProductEntryPageState extends State<ProductEntryPage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (!snapshot.hasData) {
-              return const Center(child: Text("Tidak ada data produk."));
+              return const Column(
+                children: [
+                  Text(
+                    "Belum ada data produk.",
+                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              );
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) {
-                  var product = snapshot.data![index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                itemBuilder: (_, index) => Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
                     child: InkWell(
                       onTap: () {
-                        // Tugas No. 6a: Navigasi ke Detail Page
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                DetailProductPage(product: product),
+                            builder: (context) => DetailProductPage(
+                              product: snapshot.data![index],
+                            ),
                           ),
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              product.fields.name,
+                              "${snapshot.data![index].fields.name}",
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 10),
-                            Text("Price: ${product.fields.price}"),
-                            Text("Category: ${product.fields.category}"),
-                            // Tambahkan thumbnail jika url valid
+                            Text(
+                              "Price: Rp${snapshot.data![index].fields.price}",
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Description: ${snapshot.data![index].fields.description}",
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Category: ${snapshot.data![index].fields.category}",
+                            ),
                           ],
                         ),
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               );
             }
           }
