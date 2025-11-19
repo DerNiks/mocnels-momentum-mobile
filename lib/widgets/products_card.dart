@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mocnels_momentum/screens/product_form.dart';
-import 'package:mocnels_momentum/screens/product_entry_list.dart';
+import 'package:mocnels_momentum/screens/list_product.dart';
 import 'package:mocnels_momentum/screens/login.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';

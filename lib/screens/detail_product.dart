@@ -9,52 +9,95 @@ class DetailProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Produk')),
+      appBar: AppBar(
+        title: const Text('Detail Produk'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Thumbnail
+              if (product.fields.thumbnail.isNotEmpty)
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.network(
+                      product.fields.thumbnail,
+                      fit: BoxFit.cover,
+                      errorBuilder: (ctx, err, _) =>
+                          const Icon(Icons.broken_image, size: 100),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 20),
+
+              // Nama
               Text(
                 product.fields.name,
                 style: const TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
-              _buildDetailRow("Brand", product.fields.brand),
-              _buildDetailRow("Harga", "Rp${product.fields.price}"),
-              _buildDetailRow("Stok", "${product.fields.stock}"),
-              _buildDetailRow("Kategori", product.fields.category),
-              _buildDetailRow("Deskripsi", product.fields.description),
-              _buildDetailRow(
-                "Featured",
-                product.fields.isFeatured ? "Ya" : "Tidak",
-              ),
-              _buildDetailRow(
-                "Dibuat pada",
-                product.fields.createdAt.toString().substring(0, 10),
-              ),
+              const SizedBox(height: 10),
 
-              const SizedBox(height: 20),
-              if (product.fields.thumbnail.isNotEmpty)
-                Image.network(
-                  product.fields.thumbnail,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Text("Gagal memuat gambar thumbnail"),
+              // Detail Atribut
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      _detailRow("Brand", product.fields.brand),
+                      const Divider(),
+                      _detailRow("Harga", "Rp${product.fields.price}"),
+                      const Divider(),
+                      _detailRow("Kategori", product.fields.category),
+                      const Divider(),
+                      _detailRow("Stok", "${product.fields.stock}"),
+                      const Divider(),
+                      _detailRow(
+                        "Featured",
+                        product.fields.isFeatured ? "Ya" : "Tidak",
+                      ),
+                      const Divider(),
+                      _detailRow(
+                        "Dibuat Pada",
+                        product.fields.createdAt.toString().split(' ')[0],
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+              const SizedBox(height: 20),
 
-              const SizedBox(height: 30),
+              // Deskripsi
+              const Text(
+                "Deskripsi:",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                product.fields.description,
+                style: const TextStyle(fontSize: 16),
+              ),
 
+              const SizedBox(height: 40),
+
+              // Tombol Kembali (Tugas 6c)
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Kembali ke Daftar Item"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Kembali ke Daftar"),
                 ),
               ),
             ],
@@ -64,20 +107,17 @@ class DetailProductPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _detailRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              "$label:",
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          Expanded(child: Text(value)),
+          Text(value, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );

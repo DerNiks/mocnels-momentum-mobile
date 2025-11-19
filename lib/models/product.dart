@@ -8,7 +8,7 @@ String productToJson(List<Product> data) =>
 
 class Product {
   String model;
-  int pk;
+  String pk;
   Fields fields;
 
   Product({required this.model, required this.pk, required this.fields});
@@ -31,11 +31,12 @@ class Fields {
   String name;
   int price;
   String description;
+  String thumbnail;
   String category;
-  int stock;
   bool isFeatured;
   String brand;
-  String thumbnail;
+  int stock;
+  int salesCount;
   DateTime createdAt;
 
   Fields({
@@ -43,11 +44,12 @@ class Fields {
     required this.name,
     required this.price,
     required this.description,
+    required this.thumbnail,
     required this.category,
-    required this.stock,
     required this.isFeatured,
     required this.brand,
-    required this.thumbnail,
+    required this.stock,
+    required this.salesCount,
     required this.createdAt,
   });
 
@@ -56,11 +58,12 @@ class Fields {
     name: json["name"],
     price: json["price"],
     description: json["description"],
+    thumbnail: json["thumbnail"],
     category: json["category"],
-    stock: json["stock"],
     isFeatured: json["is_featured"],
     brand: json["brand"],
-    thumbnail: json["thumbnail"],
+    stock: json["stock"],
+    salesCount: json["sales_count"],
     createdAt: DateTime.parse(json["created_at"]),
   );
 
@@ -69,11 +72,12 @@ class Fields {
     "name": name,
     "price": price,
     "description": description,
+    "thumbnail": thumbnail,
     "category": category,
-    "stock": stock,
     "is_featured": isFeatured,
     "brand": brand,
-    "thumbnail": thumbnail,
+    "stock": stock,
+    "sales_count": salesCount,
     "created_at": createdAt.toIso8601String(),
   };
 }

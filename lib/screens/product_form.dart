@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mocnels_momentum/widgets/left_drawer.dart';
+import 'dart:convert';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:mocnels_momentum/screens/list_product.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -10,7 +14,7 @@ class ProductFormPage extends StatefulWidget {
 
 class _ProductFormPageState extends State<ProductFormPage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -21,14 +25,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   bool _isFeatured = false;
   String? _selectedCategory;
-  
+
   final List<String> _categories = [
     "Jersey",
     "Jaket",
     "Sepatu",
     "Kaus Kaki",
     "Aksesoris",
-    "Celana"
+    "Celana",
   ];
 
   @override
@@ -52,69 +56,56 @@ class _ProductFormPageState extends State<ProductFormPage> {
     );
     if (picked != null) {
       setState(() {
-        _createdDateController.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+        _createdDateController.text =
+            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
       });
     }
   }
 
-  void _submitForm() {
+  // FUNGSI YANG DIUBAH
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      int price = int.parse(_priceController.text);
-      String description = _descriptionController.text;
-      String brand = _brandController.text;
-      int stock = int.parse(_stockController.text);
-      String thumbnail = _thumbnailController.text;
-      String category = _selectedCategory!;
-      String createdDate = _createdDateController.text;
-      bool isFeatured = _isFeatured;
+      final request = context.read<CookieRequest>();
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Produk Berhasil Disimpan"),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Nama: $name"),
-                  Text("Brand: $brand"),
-                  Text("Harga: $price"),
-                  Text("Stok: $stock"),
-                  Text("Deskripsi: $description"),
-                  Text("Kategori: $category"),
-                  Text("Tanggal Dibuat: $createdDate"),
-                  Text("Is Featured: $isFeatured"),
-                  Text("Thumbnail URL: $thumbnail", style: const TextStyle(fontSize: 12)),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+      final response = await request.postJson(
+        "http://localhost:8000/create-flutter/",
+        jsonEncode(<String, String>{
+          'name': _nameController.text,
+          'price': _priceController.text,
+          'description': _descriptionController.text,
+          'brand': _brandController.text,
+          'stock': _stockController.text,
+          'category': _selectedCategory!,
+          'thumbnail': _thumbnailController.text,
+          'is_featured': _isFeatured
+              .toString(),
+          'created_at': _createdDateController.text.isEmpty
+              ? DateTime.now().toString().split(
+                  ' ',
+                )[0]
+              : _createdDateController.text,
+        }),
       );
 
-      _formKey.currentState!.reset();
-      _nameController.clear();
-      _priceController.clear();
-      _descriptionController.clear();
-      _brandController.clear();
-      _stockController.clear();
-      _thumbnailController.clear();
-      _createdDateController.clear();
-      setState(() {
-        _isFeatured = false;
-        _selectedCategory = null;
-      });
+      if (context.mounted) {
+        if (response['status'] == 'success') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Produk baru berhasil disimpan ke server!"),
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ProductEntryPage()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Terdapat kesalahan, silakan coba lagi."),
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -126,7 +117,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
       ),
-      drawer: const LeftDrawer(), 
+      drawer: const LeftDrawer(),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -246,7 +237,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       return "Thumbnail URL tidak boleh kosong!";
                     }
                     if (!(Uri.tryParse(value)?.isAbsolute ?? false)) {
-                       return "Silakan masukkan URL yang valid.";
+                      return "Silakan masukkan URL yang valid.";
                     }
                     return null;
                   },
@@ -315,9 +306,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 ),
                 const SizedBox(height: 24.0),
 
-                // --- Tombol Save ---
                 ElevatedButton(
-                  onPressed: _submitForm, // Panggil fungsi _submitForm
+                  onPressed:
+                      _submitForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,

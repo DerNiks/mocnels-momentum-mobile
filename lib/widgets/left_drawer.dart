@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mocnels_momentum/screens/menu.dart';
 import 'package:mocnels_momentum/screens/product_form.dart';
-import 'package:mocnels_momentum/screens/product_entry_list.dart';
+import 'package:mocnels_momentum/screens/list_product.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
